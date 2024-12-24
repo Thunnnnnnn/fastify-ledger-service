@@ -15,22 +15,10 @@ const hashPassword = async (password: string): Promise<string> => {
   }
 };
 
-const getUsers = async (request: FastifyRequest, reply: FastifyReply) => {
-  let { page, limit } = request.query as {
-    page: string;
-    limit: string;
-  };
-
-  page = page || "1";
-  limit = limit || "10";
-
-  const pageNumber = Math.max(parseInt(page, 10), 1);
-  const limitNumber = Math.max(parseInt(limit, 10), 1);
-  const offset = (pageNumber - 1) * limitNumber;
-
+const getUsers = async (request: FastifyRequest, reply: FastifyReply, offset: number, limit: number) => {
   const users = await db.user.findMany({
     skip: offset,
-    take: limitNumber,
+    take: limit,
   });
 
   return reply.code(200).send({
@@ -51,6 +39,14 @@ const createUser = async (request: FastifyRequest, reply: FastifyReply) => {
   if (!user.email || !user.password) {
     return reply.code(400).send({
       message: "Email and password is required",
+    });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(user.email)) {
+    return reply.code(400).send({
+      message: "Invalid email format",
     });
   }
 

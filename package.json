@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx nodemon script.ts"
+    "dev": "npx nodemon script.ts",
+    "push": "npx prisma db push",
+    "pull": "npx prisma db pull",
+    "generate": "npx prisma generate",
+    "db:push": "npx prisma db push",
+    "db:pull": "npx prisma db pull"
   },
   "keywords": [],
   "author": "",
@@ -25,4 +30,5 @@
     "fastify-session": "^5.2.1",
     "uuid": "^11.0.3"
   }
+  
 }
