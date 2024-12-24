@@ -8,6 +8,10 @@ const routes: FastifyPluginCallback = (fastify: FastifyInstance, options, done) 
     return userControllers.getUsers(request, reply)
   })
 
+  fastify.post('/users', async (request, reply) => {
+    return userControllers.createUser(request, reply)
+  })
+
   done()
 }
 
