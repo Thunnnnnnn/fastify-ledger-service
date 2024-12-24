@@ -1,10 +1,16 @@
 import Fastify from "fastify";
 import routes from "./routes";
-
+import fastifyCookie, { FastifyCookieOptions } from "@fastify/cookie";
+// import fastifySession from "fastify-session";
 
 const fastify = Fastify({
   logger: true,
 });
+
+fastify.register(fastifyCookie, {
+    secret: "my-secret", // for cookies signature
+    parseOptions: {}     // options for parsing cookies
+  } as FastifyCookieOptions)
 
 // Declare a route
 fastify.get("/", async function handler() {

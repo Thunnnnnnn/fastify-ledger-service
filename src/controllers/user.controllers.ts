@@ -3,6 +3,8 @@ import { db } from "../untils/db.server";
 import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 
+import { v4 as uuidv4 } from "uuid";
+
 // ฟังก์ชัน hash รหัสผ่าน
 const hashPassword = async (password: string): Promise<string> => {
   const saltRounds = 10; // จำนวนรอบในการสร้าง salt
@@ -23,7 +25,7 @@ const createUser = async (request: FastifyRequest, reply: FastifyReply) => {
   const user = request.body as User;
 
   if (!user) {
-    reply.code(400).send({
+    return reply.code(400).send({
       message: "Bad request",
     });
   }
@@ -37,21 +39,24 @@ const createUser = async (request: FastifyRequest, reply: FastifyReply) => {
       },
     });
 
-    reply.code(201).send({
+    return reply.code(201).send({
       message: "User created successfully",
       data: createUser,
     });
   } catch (error) {
     console.log(error);
 
-    reply.code(500).send({
+    return reply.code(500).send({
       message: "Internal server error",
       error,
     });
   }
 };
 
+
+
 export default {
   getUsers,
   createUser,
+  
 };
