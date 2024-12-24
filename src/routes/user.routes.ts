@@ -1,6 +1,6 @@
 // routes.ts
 import { FastifyInstance, FastifyPluginCallback } from 'fastify'
-import userControllers from '../controllers/user.controllers'
+import userControllers from '../controllers/user.controller'
 
 const routes: FastifyPluginCallback = (fastify: FastifyInstance, options, done) => {
 
