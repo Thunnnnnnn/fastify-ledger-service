@@ -1,9 +1,7 @@
-import Fastify, { FastifyRequest, FastifyReply } from "fastify";
+import { FastifyRequest, FastifyReply } from "fastify";
 import { db } from "../untils/db.server";
 import type { User } from "../interface/users.types";
 import bcrypt from "bcrypt";
-
-import { v4 as uuidv4 } from "uuid";
 
 // ฟังก์ชัน hash รหัสผ่าน
 const hashPassword = async (password: string): Promise<string> => {
@@ -18,7 +16,27 @@ const hashPassword = async (password: string): Promise<string> => {
 };
 
 const getUsers = async (request: FastifyRequest, reply: FastifyReply) => {
-  return;
+  let { page, limit } = request.query as {
+    page: string;
+    limit: string;
+  };
+
+  page = page || "1";
+  limit = limit || "10";
+
+  const pageNumber = Math.max(parseInt(page, 10), 1);
+  const limitNumber = Math.max(parseInt(limit, 10), 1);
+  const offset = (pageNumber - 1) * limitNumber;
+
+  const users = await db.user.findMany({
+    skip: offset,
+    take: limitNumber,
+  });
+
+  return reply.code(200).send({
+    message: "Get users successfully",
+    data: users,
+  });
 };
 
 const createUser = async (request: FastifyRequest, reply: FastifyReply) => {
@@ -30,7 +48,7 @@ const createUser = async (request: FastifyRequest, reply: FastifyReply) => {
     });
   }
 
-  if(!user.email || !user.password) {
+  if (!user.email || !user.password) {
     return reply.code(400).send({
       message: "Email and password is required",
     });
@@ -59,10 +77,7 @@ const createUser = async (request: FastifyRequest, reply: FastifyReply) => {
   }
 };
 
-
-
 export default {
   getUsers,
   createUser,
-  
 };
