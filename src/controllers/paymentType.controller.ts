@@ -33,6 +33,7 @@ const createPaymentType = async (request: FastifyRequest, reply: FastifyReply) =
         const createPaymentType = await db.paymentType.create({
             data: {
                 name: paymentType.name,
+                increment: paymentType.increment,
             },
         });
 
