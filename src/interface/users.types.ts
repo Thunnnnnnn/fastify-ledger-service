@@ -1,4 +1,4 @@
-export interface User {
+interface User {
     id?: number;
     name?: string;
     email?: string;
@@ -6,3 +6,5 @@ export interface User {
     createdAt?: Date;
     updatedAt?: Date;
 }
+
+export { User };

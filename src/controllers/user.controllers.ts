@@ -1,6 +1,6 @@
 import Fastify, { FastifyRequest, FastifyReply } from "fastify";
 import { db } from "../untils/db.server";
-import { User } from "@prisma/client";
+import type { User } from "../interface/users.types";
 import bcrypt from "bcrypt";
 
 import { v4 as uuidv4 } from "uuid";
@@ -30,10 +30,16 @@ const createUser = async (request: FastifyRequest, reply: FastifyReply) => {
     });
   }
 
+  if(!user.email || !user.password) {
+    return reply.code(400).send({
+      message: "Email and password is required",
+    });
+  }
+
   try {
     const createUser = await db.user.create({
       data: {
-        name: user.name,
+        name: user.name ? user.name : undefined,
         email: user.email,
         password: await hashPassword(user.password),
       },
