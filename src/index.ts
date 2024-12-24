@@ -1,23 +1,26 @@
-import Fastify from 'fastify'
+import Fastify from "fastify";
+import routes from "./routes";
+
+
 const fastify = Fastify({
-  logger: true
-})
+  logger: true,
+});
 
 // Declare a route
-fastify.get('/', async function handler (request, reply) {
-  return { hello: 'world' }
-})
+fastify.get("/", async function handler() {
+  return "Hello world!";
+});
 
-// Run the server!
+routes(fastify);
+
 const start = async () => {
   try {
-    const route = await fastify.listen({ port: 3000 })
-    console.log(`Server listening on ${route}`)
-
+    fastify.listen({ port: 3000 });
+    console.log("Server listening on http://localhost:3000");
   } catch (err) {
-    fastify.log.error(err)
-    process.exit(1)
+    fastify.log.error(err);
+    process.exit(1);
   }
-}
+};
 
-export default start
+export default start;
