@@ -27,6 +27,7 @@ model User {
 model paymentType {
   id        Int      @id @default(autoincrement())
   name      String
+  increment Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   payments  Payment[]
